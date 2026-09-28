@@ -1,84 +1,93 @@
 import Review from "../models/review.model.js";
 import User from "../models/user.model.js";
-import Genre from "../models/genre.model.js";
+import { getMovieService } from "./movies.services.js";
+import { updateRecommendationsService } from "./recommendations.services.js";
+
+export const PLUS_REVIEW_LIMIT = 4;
+
+const createError = (status, message) => {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+};
+
+const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const createReviewService = async (userId, data) => {
   const user = await User.findById(userId);
   if (!user) {
-    const e = new Error("Usuario no encontrado");
-    e.status = 404;
-    throw e;
+    throw createError(404, "Usuario no encontrado");
   }
-  if (!(await Genre.findById(data.genreId))) {
-    const e = new Error("Género no encontrado");
-    e.status = 404;
-    throw e;
+
+  const reviewCount = await Review.countDocuments({ userId });
+  if (user.plan === "PLUS" && reviewCount >= PLUS_REVIEW_LIMIT) {
+    throw createError(403, `El plan PLUS permite un máximo de ${PLUS_REVIEW_LIMIT} reseñas`);
   }
-  if (user.plan === "PLUS" && (await Review.countDocuments({ userId })) >= 4) {
-    const e = new Error("El plan PLUS permite un máximo de 4 reseñas");
-    e.status = 403;
-    throw e;
+
+  const alreadyReviewed = await Review.exists({ userId, tmdbId: data.tmdbId });
+  if (alreadyReviewed) {
+    throw createError(409, "Ya reseñaste esta película");
   }
-  return Review.create({ ...data, userId });
+
+  const movie = await getMovieService(data.tmdbId);
+
+  const review = await Review.create({
+    userId,
+    tmdbId: movie.tmdbId,
+    movieTitle: movie.title,
+    synopsis: movie.overview,
+    genres: movie.genres.map((genre) => genre._id),
+    description: data.description,
+    points: data.points,
+    imageUrl: data.imageUrl || movie.posterUrl,
+  });
+
+  await review.populate("genres", "name");
+  const recommendations = await updateRecommendationsService(userId);
+
+  return { review, recommendations };
 };
 
-export const getReviewsService = async (userId, query) => {
-  let page = parseInt(query.page) || 1, limit = parseInt(query.limit) || 10;
-  if (page < 1) page = 1;
-  if (limit < 1) limit = 10;
-  if (limit > 50) limit = 50;
-
+export const getReviewsService = async (userId, { page, limit, genreId, points, title }) => {
   const filter = { userId };
 
-  if (query.genreId) filter.genreId = query.genreId;
-  if (query.points) filter.points = Number(query.points);
-  if (query.title) filter.movieTitle = { $regex: query.title, $options: "i" };
+  if (genreId) filter.genres = genreId;
+  if (points) filter.points = points;
+  if (title) filter.movieTitle = { $regex: escapeRegex(title), $options: "i" };
+
   const total = await Review.countDocuments(filter);
   const reviews = await Review.find(filter)
-    .populate("genreId", "name")
+    .populate("genres", "name")
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit);
+
   return { page, limit, total, pages: Math.ceil(total / limit), reviews };
 };
 
 export const getReviewByIdService = async (userId, id) => {
-  const r = await Review.findOne({ _id: id, userId }).populate(
-    "genreId",
-    "name",
-  );
-  if (!r) {
-    const e = new Error("Reseña no encontrada");
-    e.status = 404;
-    throw e;
+  const review = await Review.findOne({ _id: id, userId }).populate("genres", "name");
+  if (!review) {
+    throw createError(404, "Reseña no encontrada");
   }
-  return r;
+  return review;
 };
 
 export const updateReviewService = async (userId, id, data) => {
-  if (!(await Genre.findById(data.genreId))) {
-    const e = new Error("Género no encontrado");
-    e.status = 404;
-    throw e;
-  }
-  const r = await Review.findOneAndUpdate({ _id: id, userId }, data, {
-    new: true,
+  const review = await Review.findOneAndUpdate({ _id: id, userId }, data, {
+    returnDocument: "after",
     runValidators: true,
-  });
-  if (!r) {
-    const e = new Error("Reseña no encontrada");
-    e.status = 404;
-    throw e;
+  }).populate("genres", "name");
+  if (!review) {
+    throw createError(404, "Reseña no encontrada");
   }
-  return r;
+  return review;
 };
 
 export const deleteReviewService = async (userId, id) => {
-  const r = await Review.findOneAndDelete({ _id: id, userId });
-  if (!r) {
-    const e = new Error("Reseña no encontrada");
-    e.status = 404;
-    throw e;
+  const review = await Review.findOneAndDelete({ _id: id, userId });
+  if (!review) {
+    throw createError(404, "Reseña no encontrada");
   }
-  return r;
+  return review;
 };

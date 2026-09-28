@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+const recommendationSchema = new mongoose.Schema(
+  {
+    tmdbId: { type: Number, required: true },
+    title: { type: String, required: true },
+    posterUrl: { type: String, default: "" },
+    reason: { type: String, default: "" },
+  },
+  { _id: false },
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -13,6 +23,8 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     plan: { type: String, enum: ["PLUS", "PREMIUM"], default: "PLUS" },
     role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" },
+    recommendations: { type: [recommendationSchema], default: [] },
+    recommendationsUpdatedAt: { type: Date, default: null },
   },
   { timestamps: true },
 );

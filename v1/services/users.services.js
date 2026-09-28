@@ -1,6 +1,50 @@
 import User from "../models/user.model.js";
-export const upgradePlanService = async userId => {
-  const user=await User.findById(userId); if(!user){const e=new Error("Usuario no encontrado");e.status=404;throw e;}
-  if(user.plan==="PREMIUM"){const e=new Error("El usuario ya tiene plan PREMIUM");e.status=400;throw e;}
-  user.plan="PREMIUM"; await user.save(); return { id:user._id, email:user.email, plan:user.plan };
+import Review from "../models/review.model.js";
+import { buildAuthResponse } from "./auth.services.js";
+import { PLUS_REVIEW_LIMIT } from "./reviews.services.js";
+
+const createError = (status, message) => {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+};
+
+const findUserById = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw createError(404, "Usuario no encontrado");
+  }
+  return user;
+};
+
+export const getProfileService = async (userId) => {
+  const user = await findUserById(userId);
+  const reviewCount = await Review.countDocuments({ userId });
+  const limit = user.plan === "PLUS" ? PLUS_REVIEW_LIMIT : null;
+
+  return {
+    user: buildAuthResponse(user).user,
+    usage: {
+      reviews: reviewCount,
+      limit,
+      percentage: limit ? Math.round((reviewCount / limit) * 100) : null,
+    },
+    recommendations: user.recommendations,
+    recommendationsUpdatedAt: user.recommendationsUpdatedAt,
+  };
+};
+
+export const upgradePlanService = async (userId) => {
+  const user = await findUserById(userId);
+
+  if (user.role === "ADMIN") {
+    throw createError(403, "El administrador no gestiona planes");
+  }
+  if (user.plan === "PREMIUM") {
+    throw createError(400, "El usuario ya tiene plan PREMIUM");
+  }
+
+  user.plan = "PREMIUM";
+  await user.save();
+  return buildAuthResponse(user);
 };

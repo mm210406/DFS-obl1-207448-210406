@@ -1,15 +1,11 @@
-import { searchMoviesService } from "../services/movies.services.js";
+import { getCatalogService, getMovieService } from "../services/movies.services.js";
 
-export const searchMovies = async (req, res) => {
-    if (!req.query.title) {
-        return res.status(400).json({
-            mensaje: "El parámetro title es obligatorio"
-        });
-    }
+export const getMovies = async (req, res) => {
+  const catalog = await getCatalogService(req.validatedQuery);
+  res.json(catalog);
+};
 
-    const movies = await searchMoviesService(
-        req.query.title
-    );
-
-    res.json(movies);
+export const getMovieById = async (req, res) => {
+  const movie = await getMovieService(req.validatedParams.tmdbId);
+  res.json(movie);
 };

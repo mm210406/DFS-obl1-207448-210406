@@ -2,12 +2,16 @@ import * as service from "../services/reviews.services.js";
 
 export const createReview = async (req, res) => {
 
-    const review = await service.createReviewService(
+    const { review, recommendations } = await service.createReviewService(
         req.user.userId,
         req.validatedBody
     );
 
-    res.status(201).json(review);
+    res.status(201).json({
+        mensaje: "Reseña creada",
+        review,
+        recommendations
+    });
 };
 
 
@@ -15,7 +19,7 @@ export const getReviews = async (req, res) => {
 
     const reviews = await service.getReviewsService(
         req.user.userId,
-        req.query
+        req.validatedQuery
     );
 
     res.json(reviews);

@@ -1,8 +1,12 @@
 import express from "express";
-import {searchMovies} from "../controllers/movies.controllers.js"; 
+import { validateQueryMiddleware } from "../middlewares/validateQuery.middleware.js";
+import { validateParamsMiddleware } from "../middlewares/validateParams.middleware.js";
+import { moviesQuerySchema, tmdbIdParamSchema } from "../validators/movies.validators.js";
+import { getMovies, getMovieById } from "../controllers/movies.controllers.js";
 
-const router=express.Router(); 
+const router = express.Router();
 
-router.get("/external-search",searchMovies); 
+router.get("/", validateQueryMiddleware(moviesQuerySchema), getMovies);
+router.get("/:tmdbId", validateParamsMiddleware(tmdbIdParamSchema), getMovieById);
 
 export default router;

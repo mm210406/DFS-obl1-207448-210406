@@ -2,7 +2,7 @@ import express from "express";
 import { validateBodyMiddleware } from "../middlewares/validateBody.middleware.js";
 import { validateParamsMiddleware } from "../middlewares/validateParams.middleware.js";
 import { authorizeAdminMiddleware } from "../middlewares/authorize.middleware.js";
-import { genreSchema } from "../validators/genres.validators.js";
+import { createGenreSchema, updateGenreSchema } from "../validators/genres.validators.js";
 import { idParamSchema } from "../validators/common.validators.js";
 import {
   createGenre,
@@ -21,15 +21,15 @@ router.get("/:id", validateParamsMiddleware(idParamSchema), getGenreById);
 router.post(
   "/",
   authorizeAdminMiddleware,
-  validateBodyMiddleware(genreSchema),
+  validateBodyMiddleware(createGenreSchema),
   createGenre,
 );
 
-router.put(
+router.patch(
   "/:id",
   authorizeAdminMiddleware,
   validateParamsMiddleware(idParamSchema),
-  validateBodyMiddleware(genreSchema),
+  validateBodyMiddleware(updateGenreSchema),
   updateGenre,
 );
 

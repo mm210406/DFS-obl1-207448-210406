@@ -1,10 +1,67 @@
 import Joi from "joi";
+import { objectIdRule } from "./common.validators.js";
 
-export const reviewSchema = Joi.object({
-  genreId: Joi.string().required(),
-  movieTitle: Joi.string().trim().min(1).max(150).required(),
-  externalMovieId: Joi.string().allow("").optional(), //MARTINAVER
-  description: Joi.string().trim().min(3).max(2000).required(),
-  points: Joi.number().integer().min(1).max(10).required(),
-  imageUrl: Joi.string().uri().allow("").optional(),
+const descriptionRule = Joi.string().trim().min(3).max(2000).messages({
+  "string.base": "La reseña debe ser un texto",
+  "string.empty": "La reseña no puede estar vacía",
+  "string.min": "La reseña debe tener al menos {#limit} caracteres",
+  "string.max": "La reseña no puede tener más de {#limit} caracteres",
+  "any.required": "La reseña es obligatoria",
+});
+
+const pointsRule = Joi.number().integer().min(1).max(10).messages({
+  "number.base": "El puntaje debe ser un número",
+  "number.integer": "El puntaje debe ser un número entero",
+  "number.min": "El puntaje debe ser como mínimo {#limit}",
+  "number.max": "El puntaje debe ser como máximo {#limit}",
+  "any.required": "El puntaje es obligatorio",
+});
+
+const imageUrlRule = Joi.string().uri().allow("").messages({
+  "string.base": "La imagen debe ser un texto",
+  "string.uri": "La imagen debe ser una URL válida",
+});
+
+export const createReviewSchema = Joi.object({
+  tmdbId: Joi.number().integer().min(1).required().messages({
+    "number.base": "El id de la película debe ser un número",
+    "number.integer": "El id de la película debe ser un número entero",
+    "number.min": "El id de la película debe ser mayor a 0",
+    "any.required": "El id de la película es obligatorio",
+  }),
+  description: descriptionRule.required(),
+  points: pointsRule.required(),
+  imageUrl: imageUrlRule,
+});
+
+export const updateReviewSchema = Joi.object({
+  description: descriptionRule,
+  points: pointsRule,
+  imageUrl: imageUrlRule,
+})
+  .min(1)
+  .messages({
+    "object.min": "Debe enviar al menos un campo para modificar",
+  });
+
+export const reviewsQuerySchema = Joi.object({
+  page: Joi.number().integer().min(1).default(1).messages({
+    "number.base": "page debe ser un número",
+    "number.integer": "page debe ser un número entero",
+    "number.min": "page debe ser mayor o igual a {#limit}",
+  }),
+  limit: Joi.number().integer().min(1).max(50).default(10).messages({
+    "number.base": "limit debe ser un número",
+    "number.integer": "limit debe ser un número entero",
+    "number.min": "limit debe ser mayor o igual a {#limit}",
+    "number.max": "limit debe ser menor o igual a {#limit}",
+  }),
+  genreId: objectIdRule.messages({
+    "string.hex": "genreId debe ser un id válido",
+    "string.length": "genreId debe ser un id válido",
+  }),
+  points: pointsRule,
+  title: Joi.string().trim().max(100).messages({
+    "string.max": "El título no puede tener más de {#limit} caracteres",
+  }),
 });

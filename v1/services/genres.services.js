@@ -28,7 +28,7 @@ export const getGenreByIdService = async (id) => {
 
 export const updateGenreService = async (id, data) => {
   const g = await Genre.findByIdAndUpdate(id, data, {
-    new: true,
+    returnDocument: "after",
     runValidators: true,
   });
   if (!g) {
@@ -40,7 +40,7 @@ export const updateGenreService = async (id, data) => {
 };
 
 export const deleteGenreService = async (id) => {
-  if (await Review.exists({ genreId: id })) {
+  if (await Review.exists({ genres: id })) {
     const e = new Error("No se puede eliminar un género utilizado por reseñas");
     e.status = 409;
     throw e;

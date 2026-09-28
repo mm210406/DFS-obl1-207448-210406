@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-const buildAuthResponse = (user) => {
+export const buildAuthResponse = (user) => {
   const token = jwt.sign(
-    { userId: user._id, email: user.email, role: user.role, plan: user.plan },
+    { userId: user._id, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1d" },
   );
