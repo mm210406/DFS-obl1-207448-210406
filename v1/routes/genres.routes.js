@@ -1,7 +1,9 @@
 import express from "express";
 import { validateBodyMiddleware } from "../middlewares/validateBody.middleware.js";
+import { validateParamsMiddleware } from "../middlewares/validateParams.middleware.js";
 import { authorizeAdminMiddleware } from "../middlewares/authorize.middleware.js";
 import { genreSchema } from "../validators/genres.validators.js";
+import { idParamSchema } from "../validators/common.validators.js";
 import {
   createGenre,
   getGenres,
@@ -14,7 +16,7 @@ const router = express.Router();
 
 router.get("/", getGenres);
 
-router.get("/:id", getGenreById);
+router.get("/:id", validateParamsMiddleware(idParamSchema), getGenreById);
 
 router.post(
   "/",
@@ -26,10 +28,16 @@ router.post(
 router.put(
   "/:id",
   authorizeAdminMiddleware,
+  validateParamsMiddleware(idParamSchema),
   validateBodyMiddleware(genreSchema),
   updateGenre,
 );
 
-router.delete("/:id", authorizeAdminMiddleware, deleteGenre);
+router.delete(
+  "/:id",
+  authorizeAdminMiddleware,
+  validateParamsMiddleware(idParamSchema),
+  deleteGenre,
+);
 
 export default router;

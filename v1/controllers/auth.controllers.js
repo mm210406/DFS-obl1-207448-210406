@@ -1,11 +1,12 @@
 import { registerService, loginService } from "../services/auth.services.js";
 
 export const register = async (req, res) => {
-  const user = await registerService(req.validatedBody);
+  const result = await registerService(req.validatedBody);
 
   res.status(201).json({
     mensaje: "Usuario registrado",
-    token: user.token
+    token: result.token,
+    user: result.user,
   });
 };
 
