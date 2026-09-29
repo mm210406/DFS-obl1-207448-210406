@@ -2,7 +2,7 @@ import multer from "multer";
 
 const storage = multer.memoryStorage();
 
-export const MAX_IMAGE_SIZE_MB = 5;
+export const MAX_IMAGE_SIZE_MB = 4;
 
 export const upload = multer({
   storage,

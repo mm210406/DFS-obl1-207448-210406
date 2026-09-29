@@ -9,7 +9,7 @@ API REST de reseñas de películas con enfoque family friendly. Hecha con NodeJS
 - **Reseñas (documento principal):** el usuario elige una película del catálogo por su `tmdbId`. El backend trae el título, la sinopsis y los géneros de TMDB y rechaza la reseña si la película no está permitida. Una reseña por película.
 - **Planes:** PLUS permite 4 reseñas y PREMIUM, ilimitadas. El admin no gestiona planes.
 - **IA (Groq):** al crear una reseña se generan recomendaciones a partir de las reseñas del usuario. Cada recomendación se verifica contra el catálogo permitido. Si la IA no está disponible, la reseña se guarda igual.
-- **Imágenes (Cloudinary):** subida de imágenes de hasta 5 MB. Si una reseña no tiene imagen, se usa el póster de TMDB.
+- **Imágenes (Cloudinary):** subida de imágenes de hasta 4 MB. Si una reseña no tiene imagen, se usa el póster de TMDB.
 
 ## Puesta en marcha
 
