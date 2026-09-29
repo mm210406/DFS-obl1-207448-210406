@@ -14,7 +14,7 @@ const createError = (status, message) => {
 const tmdbGet = async (path, params = {}) => {
   try {
     const response = await axios.get(`${TMDB_URL}${path}`, {
-      params: { api_key: process.env.TMDB_API_KEY, language: "es-ES", ...params },
+      params: { api_key: process.env.TMDB_API_KEY, language: "es-MX", ...params },
       timeout: 5000,
     });
     return response.data;
@@ -78,6 +78,15 @@ export const getMovieService = async (tmdbId) => {
 
   if (movie.adult || !isMovieAllowed(movieGenreIds, allowedGenreIds)) {
     throw createError(404, "Película no encontrada");
+  }
+
+  if (!movie.overview) {
+    try {
+      const englishMovie = await tmdbGet(`/movie/${tmdbId}`, { language: "en-US" });
+      movie.overview = englishMovie.overview;
+    } catch {
+      console.error("No se pudo obtener la sinopsis de la película.");
+    }
   }
 
   return formatMovie(movie, movieGenreIds, dbGenres);

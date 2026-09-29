@@ -1,11 +1,11 @@
 import Joi from "joi";
 
 const nameRules = Joi.string().trim().min(2).max(50).messages({
-  "string.base": "El nombre debe ser un texto",
-  "string.empty": "El nombre no puede estar vacío",
-  "string.min": "El nombre debe tener al menos {#limit} caracteres",
-  "string.max": "El nombre no puede tener más de {#limit} caracteres",
-  "any.required": "El nombre es obligatorio",
+    "string.base": "El nombre debe ser un texto",
+    "string.empty": "El nombre no puede estar vacío",
+    "string.min": "El nombre debe tener al menos {#limit} caracteres",
+    "string.max": "El nombre no puede tener más de {#limit} caracteres",
+    "any.required": "El nombre es obligatorio",
 });
 
 const allowedRules = Joi.boolean().messages({
