@@ -1,7 +1,7 @@
 {
   "name": "cinereview-api",
   "version": "1.0.0",
-  "description": "API REST de reseñas de películas con enfoque familiar - Obligatorio 1 de Desarrollo Full Stack",
+  "description": "API REST de reseñas de películas family friendly - Obligatorio 1 de Desarrollo Full Stack",
   "license": "ISC",
   "author": "M Moratorio & C Pisani",
   "type": "module",

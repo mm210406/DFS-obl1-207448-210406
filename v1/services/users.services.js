@@ -2,12 +2,7 @@ import User from "../models/user.model.js";
 import Review from "../models/review.model.js";
 import { buildAuthResponse } from "./auth.services.js";
 import { PLUS_REVIEW_LIMIT } from "./reviews.services.js";
-
-const createError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-};
+import { createError } from "../utils/error.util.js";
 
 const findUserById = async (userId) => {
   const user = await User.findById(userId);

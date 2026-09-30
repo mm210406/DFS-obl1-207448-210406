@@ -1,25 +1,22 @@
 import Genre from "../models/genre.model.js";
 import Review from "../models/review.model.js";
 import { getTmdbGenresService } from "./movies.services.js";
+import { createError } from "../utils/error.util.js";
 
 export const createGenreService = async (data) => {
   const tmdbGenres = await getTmdbGenresService();
   const tmdbGenre = tmdbGenres.find((genre) => genre.id === data.tmdbId);
   if (!tmdbGenre) {
-    const e = new Error("El género no existe en TMDB");
-    e.status = 400;
-    throw e;
+    throw createError(400, "El género no existe en TMDB");
   }
 
   try {
     return await Genre.create({ ...data, name: data.name || tmdbGenre.name });
-  } catch (e) {
-    if (e.code === 11000) {
-      const x = new Error("El género ya existe");
-      x.status = 409;
-      throw x;
+  } catch (error) {
+    if (error.code === 11000) {
+      throw createError(409, "El género ya existe");
     }
-    throw e;
+    throw error;
   }
 };
 
@@ -43,39 +40,31 @@ export const getTmdbGenresWithStatusService = async () => {
 };
 
 export const getGenreByIdService = async (id) => {
-  const g = await Genre.findById(id);
-  if (!g) {
-    const e = new Error("Género no encontrado");
-    e.status = 404;
-    throw e;
+  const genre = await Genre.findById(id);
+  if (!genre) {
+    throw createError(404, "Género no encontrado");
   }
-  return g;
+  return genre;
 };
 
 export const updateGenreService = async (id, data) => {
-  const g = await Genre.findByIdAndUpdate(id, data, {
+  const genre = await Genre.findByIdAndUpdate(id, data, {
     returnDocument: "after",
     runValidators: true,
   });
-  if (!g) {
-    const e = new Error("Género no encontrado");
-    e.status = 404;
-    throw e;
+  if (!genre) {
+    throw createError(404, "Género no encontrado");
   }
-  return g;
+  return genre;
 };
 
 export const deleteGenreService = async (id) => {
   if (await Review.exists({ genres: id })) {
-    const e = new Error("No se puede eliminar un género utilizado por reseñas");
-    e.status = 409;
-    throw e;
+    throw createError(409, "No se puede eliminar un género utilizado por reseñas");
   }
-  const g = await Genre.findByIdAndDelete(id);
-  if (!g) {
-    const e = new Error("Género no encontrado");
-    e.status = 404;
-    throw e;
+  const genre = await Genre.findByIdAndDelete(id);
+  if (!genre) {
+    throw createError(404, "Género no encontrado");
   }
-  return g;
+  return genre;
 };

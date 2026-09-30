@@ -2,14 +2,9 @@ import Review from "../models/review.model.js";
 import User from "../models/user.model.js";
 import { getMovieService } from "./movies.services.js";
 import { updateRecommendationsService } from "./recommendations.services.js";
+import { createError } from "../utils/error.util.js";
 
 export const PLUS_REVIEW_LIMIT = 4;
-
-const createError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-};
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 

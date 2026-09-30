@@ -1,16 +1,11 @@
 import axios from "axios";
 import Genre from "../models/genre.model.js";
 import Review from "../models/review.model.js";
+import { createError } from "../utils/error.util.js";
 
 const TMDB_URL = "https://api.themoviedb.org/3";
 const POSTER_URL = "https://image.tmdb.org/t/p/w500";
 const TMDB_MAX_PAGES = 500;
-
-const createError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-};
 
 const tmdbGet = async (path, params = {}) => {
   try {
