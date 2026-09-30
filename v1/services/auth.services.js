@@ -10,7 +10,6 @@ export const buildAuthResponse = (user) => {
   return {
     token,
     user: {
-      id: user._id,
       name: user.name,
       email: user.email,
       plan: user.plan,
