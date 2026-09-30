@@ -25,6 +25,8 @@ export const updateRecommendationsService = async (userId) => {
         title: review.movieTitle,
         points: review.points,
         genres: review.genres.map((genre) => genre.name),
+        description: review.description,
+        date: review.updatedAt.toISOString().split("T")[0],
       })),
       allowedGenres.map((genre) => genre.name),
     );
