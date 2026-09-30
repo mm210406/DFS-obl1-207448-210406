@@ -12,6 +12,11 @@ export const getGenres = async (req, res) => {
     res.json(genres);
 };
 
+export const getTmdbGenres = async (req, res) => {
+    const genres = await service.getTmdbGenresWithStatusService();
+    res.json(genres);
+};
+
 export const getGenreById = async (req, res) => {
     const genre = await service.getGenreByIdService(
         req.params.id

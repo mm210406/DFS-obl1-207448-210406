@@ -7,6 +7,7 @@ import { idParamSchema } from "../validators/common.validators.js";
 import {
   createGenre,
   getGenres,
+  getTmdbGenres,
   getGenreById,
   updateGenre,
   deleteGenre,
@@ -15,6 +16,8 @@ import {
 const router = express.Router();
 
 router.get("/", getGenres);
+
+router.get("/tmdb", authorizeAdminMiddleware, getTmdbGenres);
 
 router.get("/:id", validateParamsMiddleware(idParamSchema), getGenreById);
 

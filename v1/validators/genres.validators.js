@@ -12,6 +12,11 @@ const allowedRules = Joi.boolean().messages({
   "boolean.base": "allowed debe ser true o false",
 });
 
+const iconRules = Joi.string().trim().max(16).allow("").messages({
+  "string.base": "El ícono debe ser un texto",
+  "string.max": "El ícono no puede tener más de {#limit} caracteres",
+});
+
 export const createGenreSchema = Joi.object({
   tmdbId: Joi.number().integer().min(1).required().messages({
     "number.base": "El tmdbId debe ser un número",
@@ -19,13 +24,15 @@ export const createGenreSchema = Joi.object({
     "number.min": "El tmdbId debe ser mayor a 0",
     "any.required": "El tmdbId es obligatorio",
   }),
-  name: nameRules.required(),
+  name: nameRules,
   allowed: allowedRules,
+  icon: iconRules,
 });
 
 export const updateGenreSchema = Joi.object({
   name: nameRules,
   allowed: allowedRules,
+  icon: iconRules,
 })
   .min(1)
   .messages({

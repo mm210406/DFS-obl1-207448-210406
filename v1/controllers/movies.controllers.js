@@ -6,6 +6,6 @@ export const getMovies = async (req, res) => {
 };
 
 export const getMovieById = async (req, res) => {
-  const movie = await getMovieService(req.validatedParams.tmdbId);
+  const movie = await getMovieService(req.validatedParams.tmdbId, req.user.userId);
   res.json(movie);
 };
