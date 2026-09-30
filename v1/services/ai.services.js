@@ -14,7 +14,8 @@ const buildPrompt = (reviews, allowedGenres) => {
 Estas son las películas que el usuario reseñó:
 ${reviewList}
 
-Recomendá ${SUGGESTIONS_REQUESTED} películas que el usuario no haya reseñado, parecidas a las que mejor puntuó y aptas para todo público.
+Recomendá ${SUGGESTIONS_REQUESTED} películas que el usuario no haya reseñado, parecidas a las que mejor puntuó y aptas para todo público. 
+Si los hay, ten en cuenta los comentarios específicos de qué parte dsifrutaron más, y de las edades de los personajes, para recomendar películas similares.
 Usá solo películas de estos géneros: ${allowedGenres.join(", ")}.
 Respondé únicamente con JSON, sin texto adicional, con este formato:
 {"recommendations":[{"title":"título original","year":2000,"reason":"una frase breve en español"}]}`;
