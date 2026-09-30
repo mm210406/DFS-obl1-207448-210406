@@ -28,8 +28,7 @@ export const getTmdbGenresService = async () => {
 };
 
 export const isMovieAllowed = (movieGenreIds, allowedGenreIds) =>
-  movieGenreIds.length > 0 &&
-  movieGenreIds.every((genreId) => allowedGenreIds.includes(genreId));
+  movieGenreIds.length > 0 && movieGenreIds.every((genreId) => allowedGenreIds.includes(genreId));
 
 const formatMovie = (movie, movieGenreIds, dbGenres) => ({
   tmdbId: movie.id,

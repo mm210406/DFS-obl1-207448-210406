@@ -10,7 +10,9 @@ export const uploadImage = async (req, res) => {
     await runMulterSingle(upload, "imagen", req, res);
   } catch (error) {
     if (error.code === "LIMIT_FILE_SIZE") {
-      return res.status(400).json({ mensaje: `La imagen no puede superar los ${MAX_IMAGE_SIZE_MB} MB` });
+      return res
+        .status(400)
+        .json({ mensaje: `La imagen no puede superar los ${MAX_IMAGE_SIZE_MB} MB` });
     }
     return res.status(400).json({ mensaje: "No se pudo leer el archivo enviado" });
   }

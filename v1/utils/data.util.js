@@ -28,10 +28,22 @@ const CLIENTS = [
     email: "ana@cinereview.com",
     plan: "PREMIUM",
     reviews: [
-      { tmdbId: 354912, points: 10, description: "Una historia hermosa sobre la familia y la memoria." },
-      { tmdbId: 14160, points: 9, description: "Los primeros minutos son de las mejores escenas del cine animado." },
+      {
+        tmdbId: 354912,
+        points: 10,
+        description: "Una historia hermosa sobre la familia y la memoria.",
+      },
+      {
+        tmdbId: 14160,
+        points: 9,
+        description: "Los primeros minutos son de las mejores escenas del cine animado.",
+      },
       { tmdbId: 862, points: 8, description: "Un clásico que se disfruta a cualquier edad." },
-      { tmdbId: 150540, points: 9, description: "Explica las emociones de una forma muy original." },
+      {
+        tmdbId: 150540,
+        points: 9,
+        description: "Explica las emociones de una forma muy original.",
+      },
     ],
   },
   {
@@ -39,9 +51,21 @@ const CLIENTS = [
     email: "carla@cinereview.com",
     plan: "PLUS",
     reviews: [
-      { tmdbId: 109445, points: 7, description: "Buenas canciones, aunque la historia es un poco previsible." },
-      { tmdbId: 277834, points: 8, description: "Visualmente increíble y con una protagonista muy valiente." },
-      { tmdbId: 269149, points: 9, description: "Divertida y con un mensaje muy claro sobre los prejuicios." },
+      {
+        tmdbId: 109445,
+        points: 7,
+        description: "Buenas canciones, aunque la historia es un poco previsible.",
+      },
+      {
+        tmdbId: 277834,
+        points: 8,
+        description: "Visualmente increíble y con una protagonista muy valiente.",
+      },
+      {
+        tmdbId: 269149,
+        points: 9,
+        description: "Divertida y con un mensaje muy claro sobre los prejuicios.",
+      },
       { tmdbId: 116149, points: 8, description: "Tierna y graciosa, ideal para ver en familia." },
     ],
   },
@@ -133,7 +157,9 @@ const createReview = async (user, { tmdbId, points, description }) => {
     console.log(`Reseña creada: ${user.email} - ${movie.title}`);
     return true;
   } catch (error) {
-    console.log(`No se pudo crear la reseña de ${user.email} para la película ${tmdbId}: ${error.message}`);
+    console.log(
+      `No se pudo crear la reseña de ${user.email} para la película ${tmdbId}: ${error.message}`,
+    );
     return false;
   }
 };

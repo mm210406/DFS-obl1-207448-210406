@@ -11,5 +11,3 @@ export function uploadBufferToCloudinary(cloudinaryInstance, buffer, options = {
     passthrough.pipe(stream);
   });
 }
-
-export default uploadBufferToCloudinary;

@@ -6,5 +6,3 @@ export function runMulterSingle(upload, field, req, res) {
     });
   });
 }
-
-export default runMulterSingle;

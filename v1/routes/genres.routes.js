@@ -21,12 +21,7 @@ router.get("/tmdb", authorizeAdminMiddleware, getTmdbGenres);
 
 router.get("/:id", validateParamsMiddleware(idParamSchema), getGenreById);
 
-router.post(
-  "/",
-  authorizeAdminMiddleware,
-  validateBodyMiddleware(createGenreSchema),
-  createGenre,
-);
+router.post("/", authorizeAdminMiddleware, validateBodyMiddleware(createGenreSchema), createGenre);
 
 router.patch(
   "/:id",

@@ -4,7 +4,10 @@ const SUGGESTIONS_REQUESTED = 5;
 
 const buildPrompt = (reviews, allowedGenres) => {
   const reviewList = reviews
-    .map((review) => `- ${review.title} (puntaje ${review.points}/10, géneros: ${review.genres.join(", ")})`)
+    .map(
+      (review) =>
+        `- ${review.title} (puntaje ${review.points}/10, géneros: ${review.genres.join(", ")})`,
+    )
     .join("\n");
 
   return `Sos el recomendador de CineReview, una plataforma de reseñas de películas apta para toda la familia.
