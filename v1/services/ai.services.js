@@ -6,7 +6,7 @@ const buildPrompt = (reviews, allowedGenres) => {
   const reviewList = reviews
     .map(
       (review) =>
-        `- ${review.title} (puntaje ${review.points}/10, géneros: ${review.genres.join(", ")})`,
+        `- ${review.title} (puntaje ${review.points}/10, géneros: ${review.genres.join(", ")}, comentario: "${review.comment}")`,
     )
     .join("\n");
 
