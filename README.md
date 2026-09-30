@@ -14,11 +14,8 @@ API REST de reseñas de películas con enfoque family friendly. Hecha con NodeJS
 ## Puesta en marcha
 
 1. `npm install`
-2. Copiar `.env.example` a `.env` y completar las variables.
-3. `npm run seed` — carga los datos de prueba (ver abajo). Necesita `MONGO_URI`, `TMDB_API_KEY` y `GROQ_API_KEY`. Se puede correr más de una vez sin duplicar datos.
-4. `npm run dev`
-
-En Vercel hay que cargar las mismas variables de entorno.
+2. `npm run seed` — carga los datos de prueba (ver abajo). Necesita `MONGO_URI`, `TMDB_API_KEY` y `GROQ_API_KEY`. Se puede correr más de una vez sin duplicar datos.
+3. `npm run dev`
 
 ## Datos de prueba (seed)
 

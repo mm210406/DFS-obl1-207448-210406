@@ -1,13 +1,12 @@
 {
-  "name": "servidor",
+  "name": "cinereview-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API REST de reseñas de películas con enfoque familiar - Obligatorio 1 de Desarrollo Full Stack",
   "license": "ISC",
-  "author": "",
+  "author": "M Moratorio & C Pisani",
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node v1/utils/data.util.js"
