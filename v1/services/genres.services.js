@@ -10,14 +10,14 @@ export const createGenreService = async (data) => {
     throw createError(400, "El género no existe en TMDB");
   }
 
-  try {
-    return await Genre.create({ ...data, name: data.name || tmdbGenre.name });
-  } catch (error) {
-    if (error.code === 11000) {
-      throw createError(409, "El género ya existe");
-    }
-    throw error;
+  const name = data.name || tmdbGenre.name;
+  const genreWithTmdbId = await Genre.findOne({ tmdbId: data.tmdbId });
+  const genreWithName = await Genre.findOne({ name });
+  if (genreWithTmdbId || genreWithName) {
+    throw createError(409, "El género ya existe");
   }
+
+  return await Genre.create({ ...data, name });
 };
 
 export const getGenresService = () => Genre.find().sort({ name: 1 });
@@ -48,10 +48,7 @@ export const getGenreByIdService = async (id) => {
 };
 
 export const updateGenreService = async (id, data) => {
-  const genre = await Genre.findByIdAndUpdate(id, data, {
-    returnDocument: "after",
-    runValidators: true,
-  });
+  const genre = await Genre.findByIdAndUpdate(id, data, { returnDocument: "after" });
   if (!genre) {
     throw createError(404, "Género no encontrado");
   }
@@ -59,7 +56,7 @@ export const updateGenreService = async (id, data) => {
 };
 
 export const deleteGenreService = async (id) => {
-  if (await Review.exists({ genres: id })) {
+  if (await Review.findOne({ genres: id })) {
     throw createError(409, "No se puede eliminar un género utilizado por reseñas");
   }
   const genre = await Genre.findByIdAndDelete(id);

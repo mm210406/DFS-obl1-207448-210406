@@ -136,7 +136,7 @@ const createClient = async ({ name, email, plan }) => {
 };
 
 const createReview = async (user, { tmdbId, points, description }) => {
-  const alreadyReviewed = await Review.exists({ userId: user._id, tmdbId });
+  const alreadyReviewed = await Review.findOne({ userId: user._id, tmdbId });
   if (alreadyReviewed) {
     console.log(`${user.email} ya reseñó la película ${tmdbId}`);
     return true;

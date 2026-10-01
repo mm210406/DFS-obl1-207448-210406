@@ -30,7 +30,7 @@ const parseSuggestions = (text) => {
   try {
     const data = JSON.parse(text.slice(start, end + 1));
     return Array.isArray(data.recommendations) ? data.recommendations : [];
-  } catch {
+  } catch (error) {
     return [];
   }
 };

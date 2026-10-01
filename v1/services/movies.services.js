@@ -84,7 +84,7 @@ export const getMovieService = async (tmdbId, userId) => {
   const movieGenreIds = movie.genres.map((genre) => genre.id);
 
   if (movie.adult || !isMovieAllowed(movieGenreIds, allowedGenreIds)) {
-    const hasReview = userId && (await Review.exists({ userId, tmdbId }));
+    const hasReview = userId && (await Review.findOne({ userId, tmdbId }));
     if (!hasReview) {
       throw createError(404, "Película no encontrada");
     }
@@ -94,7 +94,7 @@ export const getMovieService = async (tmdbId, userId) => {
     try {
       const englishMovie = await tmdbGet(`/movie/${tmdbId}`, { language: "en-US" });
       movie.overview = englishMovie.overview;
-    } catch {
+    } catch (error) {
       console.error("No se pudo obtener la sinopsis de la película.");
     }
   }

@@ -19,7 +19,7 @@ export const createReviewService = async (userId, data) => {
     throw createError(403, `El plan PLUS permite un máximo de ${PLUS_REVIEW_LIMIT} reseñas`);
   }
 
-  const alreadyReviewed = await Review.exists({ userId, tmdbId: data.tmdbId });
+  const alreadyReviewed = await Review.findOne({ userId, tmdbId: data.tmdbId });
   if (alreadyReviewed) {
     throw createError(409, "Ya reseñaste esta película");
   }
@@ -69,10 +69,10 @@ export const getReviewByIdService = async (userId, id) => {
 };
 
 export const updateReviewService = async (userId, id, data) => {
-  const review = await Review.findOneAndUpdate({ _id: id, userId }, data, {
-    returnDocument: "after",
-    runValidators: true,
-  }).populate("genres", "name");
+  const review = await Review.findOneAndUpdate({ _id: id, userId }, data, { returnDocument: "after" }).populate(
+    "genres",
+    "name",
+  );
   if (!review) {
     throw createError(404, "Reseña no encontrada");
   }
