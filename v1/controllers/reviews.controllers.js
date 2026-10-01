@@ -26,7 +26,7 @@ export const getReviews = async (req, res) => {
 };
 
 export const getReviewById = async (req, res) => {
-  const review = await getReviewByIdService(req.user.userId, req.params.id);
+  const review = await getReviewByIdService(req.user.userId, req.validatedParams.id);
 
   res.json(review);
 };
@@ -34,7 +34,7 @@ export const getReviewById = async (req, res) => {
 export const updateReview = async (req, res) => {
   const review = await updateReviewService(
     req.user.userId,
-    req.params.id,
+    req.validatedParams.id,
     req.validatedBody,
   );
 
@@ -42,7 +42,7 @@ export const updateReview = async (req, res) => {
 };
 
 export const deleteReview = async (req, res) => {
-  await deleteReviewService(req.user.userId, req.params.id);
+  await deleteReviewService(req.user.userId, req.validatedParams.id);
 
   res.json({
     mensaje: "Reseña eliminada",

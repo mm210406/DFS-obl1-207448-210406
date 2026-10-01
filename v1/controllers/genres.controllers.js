@@ -23,17 +23,17 @@ export const getTmdbGenres = async (req, res) => {
 };
 
 export const getGenreById = async (req, res) => {
-  const genre = await getGenreByIdService(req.params.id);
+  const genre = await getGenreByIdService(req.validatedParams.id);
   res.json(genre);
 };
 
 export const updateGenre = async (req, res) => {
-  const genre = await updateGenreService(req.params.id, req.validatedBody);
+  const genre = await updateGenreService(req.validatedParams.id, req.validatedBody);
   res.json(genre);
 };
 
 export const deleteGenre = async (req, res) => {
-  await deleteGenreService(req.params.id);
+  await deleteGenreService(req.validatedParams.id);
   res.json({
     mensaje: "Género eliminado",
   });
