@@ -1,7 +1,13 @@
-import * as service from "../services/reviews.services.js";
+import {
+  createReviewService,
+  getReviewsService,
+  getReviewByIdService,
+  updateReviewService,
+  deleteReviewService,
+} from "../services/reviews.services.js";
 
 export const createReview = async (req, res) => {
-  const { review, recommendations } = await service.createReviewService(
+  const { review, recommendations } = await createReviewService(
     req.user.userId,
     req.validatedBody,
   );
@@ -14,19 +20,19 @@ export const createReview = async (req, res) => {
 };
 
 export const getReviews = async (req, res) => {
-  const reviews = await service.getReviewsService(req.user.userId, req.validatedQuery);
+  const reviews = await getReviewsService(req.user.userId, req.validatedQuery);
 
   res.json(reviews);
 };
 
 export const getReviewById = async (req, res) => {
-  const review = await service.getReviewByIdService(req.user.userId, req.params.id);
+  const review = await getReviewByIdService(req.user.userId, req.params.id);
 
   res.json(review);
 };
 
 export const updateReview = async (req, res) => {
-  const review = await service.updateReviewService(
+  const review = await updateReviewService(
     req.user.userId,
     req.params.id,
     req.validatedBody,
@@ -36,7 +42,7 @@ export const updateReview = async (req, res) => {
 };
 
 export const deleteReview = async (req, res) => {
-  await service.deleteReviewService(req.user.userId, req.params.id);
+  await deleteReviewService(req.user.userId, req.params.id);
 
   res.json({
     mensaje: "Reseña eliminada",

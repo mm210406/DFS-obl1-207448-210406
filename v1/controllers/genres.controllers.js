@@ -1,32 +1,39 @@
-import * as service from "../services/genres.services.js";
+import {
+  createGenreService,
+  getGenresService,
+  getTmdbGenresWithStatusService,
+  getGenreByIdService,
+  updateGenreService,
+  deleteGenreService,
+} from "../services/genres.services.js";
 
 export const createGenre = async (req, res) => {
-  const genre = await service.createGenreService(req.validatedBody);
+  const genre = await createGenreService(req.validatedBody);
   res.status(201).json(genre);
 };
 
 export const getGenres = async (req, res) => {
-  const genres = await service.getGenresService();
+  const genres = await getGenresService();
   res.json(genres);
 };
 
 export const getTmdbGenres = async (req, res) => {
-  const genres = await service.getTmdbGenresWithStatusService();
+  const genres = await getTmdbGenresWithStatusService();
   res.json(genres);
 };
 
 export const getGenreById = async (req, res) => {
-  const genre = await service.getGenreByIdService(req.params.id);
+  const genre = await getGenreByIdService(req.params.id);
   res.json(genre);
 };
 
 export const updateGenre = async (req, res) => {
-  const genre = await service.updateGenreService(req.params.id, req.validatedBody);
+  const genre = await updateGenreService(req.params.id, req.validatedBody);
   res.json(genre);
 };
 
 export const deleteGenre = async (req, res) => {
-  await service.deleteGenreService(req.params.id);
+  await deleteGenreService(req.params.id);
   res.json({
     mensaje: "Género eliminado",
   });
